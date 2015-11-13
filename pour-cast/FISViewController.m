@@ -10,6 +10,10 @@
 #import "ForcastAPIClient.h"
 #import "FISDailyForecast.h"
 
+#import "FISDayxibView.h"
+#import "FISDayclass.h"
+
+
 @interface FISViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *dayOneName;
 @property (weak, nonatomic) IBOutlet UILabel *dayOneHighTemp;
@@ -27,6 +31,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *dayFiveHighTemp;
 @property (weak, nonatomic) IBOutlet UILabel *dayFiveLowTemp;
 
+
+
+
+@property (weak, nonatomic) IBOutlet FISDayxibView *xibDayView;
+@property (weak, nonatomic) IBOutlet FISDayxibView *xibDayView2;
+@property (weak, nonatomic) IBOutlet FISDayxibView *xibDayView3;
+
+
+
 @end
 
 @implementation FISViewController
@@ -34,10 +47,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    //[self testDay];
 
     [ForcastAPIClient getForecastForCoordinate:CLLocationCoordinate2DMake(37.8267, -122.423) Completion:^(NSArray *dailyForecastModels) {
         NSDateFormatter *format = [[NSDateFormatter alloc] init];
         [format setDateFormat:@"MM/dd"];
+        
 
         FISDailyForecast *day = dailyForecastModels[1];
         NSString *maxTemp = [NSString stringWithFormat:@"High: %.1fF", day.temperatureMax];
@@ -46,6 +62,9 @@
             self.dayOneHighTemp.text = maxTemp;
             self.dayOneLowTemp.text = minTemp;
             self.dayOneName.text = [format stringFromDate:day.date];
+            
+            FISDayclass * dayTest2 = [[FISDayclass alloc]initWithName:[format stringFromDate:day.date] highTemp:maxTemp lowTemp:minTemp];
+            self.xibDayView.day = dayTest2;
         }];
 
         day = dailyForecastModels[2];
@@ -55,6 +74,9 @@
             self.dayTwoHighTemp.text = maxTemp;
             self.dayTwoLowTemp.text = minTemp;
             self.dayTwoName.text = [format stringFromDate:day.date];
+            
+            FISDayclass * dayTest = [[FISDayclass alloc]initWithName:[format stringFromDate:day.date] highTemp:maxTemp lowTemp:minTemp];
+            self.xibDayView2.day = dayTest;
         }];
 
         day = dailyForecastModels[3];
@@ -64,6 +86,10 @@
             self.dayThreeHighTemp.text = maxTemp;
             self.dayThreeLowTemp.text = minTemp;
             self.dayThreeName.text = [format stringFromDate:day.date];
+            
+            
+            FISDayclass * dayTest = [[FISDayclass alloc]initWithName:[format stringFromDate:day.date] highTemp:maxTemp lowTemp:minTemp];
+            self.xibDayView3.day = dayTest;
         }];
 
         day = dailyForecastModels[4];
@@ -92,16 +118,19 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)testDay{
+    FISDayclass * dayTest = [FISDayclass new];
+    dayTest.name = @"guang";
+    dayTest.highTemp = @"111";
+    dayTest.lowTemp = @"222";
+    self.xibDayView2.day = dayTest;
+    NSLog(@"xibDayView %@",self.xibDayView.day);
+    
+    FISDayclass * dayTest2 = [[FISDayclass alloc]initWithName:@"hello" highTemp:@"111" lowTemp:@"4444"];
+    
+    //FISDayclass * dayTest = [FISDayclass alloc] initwithName:<#(NSString *)#> highTemp:<#(NSString *)#> lowTemp:];
+    self.xibDayView2.day = dayTest2;
 }
-*/
-
 
 
 @end
